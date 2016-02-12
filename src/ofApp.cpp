@@ -3,8 +3,10 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofSetVerticalSync(true);
+
 	ofBackground(0);
 	world.setup();
+	world.world.setIterations(8, 1);
 
 	for(int i=0; i<1000; i++) {
 		unsigned xPos = ofRandom(ofGetWidth());
@@ -20,18 +22,21 @@ void ofApp::setup(){
 void ofApp::update(){
 	world.update();
 
+	if(!(ofGetFrameNum()%5)) {
 	ofVec2f m(ofGetMouseX(), ofGetMouseY());
 	for(auto c : circles) {
 		float strength = 0;
 		float damping = 0.9;
 		float dist = m.distance(c.get()->getPosition());
+		float radius = 200;
 
-		if(dist < 100) {
-			strength = (100-dist)/2;
+		if(dist < radius) {
+			strength = (radius-dist)/2;
 		}
 
 		c.get()->addRepulsionForce(m, strength);
-		c.get()->setDamping(damping, damping);
+//		c.get()->setDamping(damping, damping);
+	}
 	}
 }
 
