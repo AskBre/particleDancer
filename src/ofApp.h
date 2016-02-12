@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxBox2d.h"
+#include "World.h"
 
 class ofApp : public ofBaseApp{
 	public:
@@ -19,4 +21,6 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+
+		World world;
 };
