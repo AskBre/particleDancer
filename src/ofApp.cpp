@@ -5,17 +5,49 @@ void ofApp::setup(){
 	ofSetVerticalSync(true);
 	ofBackground(0);
 	world.setup();
+
+	for(int i=0; i<1000; i++) {
+		unsigned xPos = ofRandom(ofGetWidth());
+		unsigned yPos = 0;
+		circles.push_back(shared_ptr <ofxBox2dCircle> (new ofxBox2dCircle));
+		circles.back().get()->setFixedRotation(true);
+		circles.back().get()->setPhysics(3, 0.53, 0.1);
+		circles.back().get()->setup(world.world.getWorld(), xPos, yPos, 5);
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 	world.update();
+
+	ofVec2f m(ofGetMouseX(), ofGetMouseY());
+	for(auto c : circles) {
+		float strength = 0;
+		float damping = 0.9;
+		float dist = m.distance(c.get()->getPosition());
+
+		if(dist < 100) {
+			strength = (100-dist)/2;
+		}
+
+		c.get()->addRepulsionForce(m, strength);
+		c.get()->setDamping(damping, damping);
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+	drawFR();
+
 	world.draw();
 	world.drawLines();
+
+	ofFill();
+	ofSetHexColor(0xFFFFFF);
+
+	for(auto c : circles) {
+		c.get()->draw();
+	}
 }
 
 //--------------------------------------------------------------
@@ -91,4 +123,9 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){
 
+}
+
+//--------------------------------------------------------------
+void ofApp::drawFR() {
+	ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 50);
 }

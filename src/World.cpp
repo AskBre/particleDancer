@@ -4,7 +4,7 @@
 void World::setup() {
 	world.init();
 	world.setGravity(0, 30);
-//	world.createBounds();
+	world.createBounds();
 	world.setFPS(60.0);
 	world.enableEvents();
 
