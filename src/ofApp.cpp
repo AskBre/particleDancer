@@ -8,39 +8,28 @@ void ofApp::setup(){
 	world.setup();
 	world.world.setIterations(8, 1);
 
-	for(int i=0; i<1000; i++) {
+	for(int i=0; i<2000; i++) {
 		unsigned xPos = ofRandom(ofGetWidth());
-		unsigned yPos = 0;
-		circles.push_back(shared_ptr <ofxBox2dCircle> (new ofxBox2dCircle));
-		circles.back().get()->setFixedRotation(true);
-		circles.back().get()->setPhysics(3, 0.53, 0.1);
-		circles.back().get()->setup(world.world.getWorld(), xPos, yPos, 5);
+		unsigned yPos = ofRandom(50)+50;
+		unsigned radius = 5;
+		ofVec2f v(ofRandom(-1, 1), ofRandom(-1, 1));
+		shared_ptr <ofxBox2dCircle> c(new ofxBox2dCircle);
+		c.get()->setFixedRotation(true);
+		c.get()->setPhysics(3, 0.53, 0.1);
+		c.get()->setVelocity(v);
+		c.get()->setup(world.world.getWorld(), xPos, yPos, radius);
+		circles.push_back(c);
 	}
 }
 
-//--------------------------------------------------------------
 void ofApp::update(){
 	world.update();
 
-	if(!(ofGetFrameNum()%5)) {
-	ofVec2f m(ofGetMouseX(), ofGetMouseY());
-	for(auto c : circles) {
-		float strength = 0;
-		float damping = 0.9;
-		float dist = m.distance(c.get()->getPosition());
-		float radius = 200;
-
-		if(dist < radius) {
-			strength = (radius-dist)/2;
-		}
-
-		c.get()->addRepulsionForce(m, strength);
-//		c.get()->setDamping(damping, damping);
-	}
+	if(world.getMode() == PLAY) {
+		updateCircles();
 	}
 }
 
-//--------------------------------------------------------------
 void ofApp::draw(){
 	drawFR();
 
@@ -50,17 +39,15 @@ void ofApp::draw(){
 	ofFill();
 	ofSetHexColor(0xFFFFFF);
 
-	for(auto c : circles) {
-		c.get()->draw();
+	if(world.getMode() == PLAY) {
+		drawCircles();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
 }
 
-//--------------------------------------------------------------
 void ofApp::keyReleased(int key){
 	switch(key) {
 		case 'c':
@@ -85,49 +72,63 @@ void ofApp::keyReleased(int key){
 	}
 }
 
-//--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y){
-
 }
 
-//--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
 	world.mouseDragged(x, y, button);
 }
 
-//--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
 	world.mousePressed(x, y, button);
 }
 
-//--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
 	world.mouseReleased(x, y, button);
 }
 
-//--------------------------------------------------------------
 void ofApp::mouseEntered(int x, int y){
-
 }
 
-//--------------------------------------------------------------
 void ofApp::mouseExited(int x, int y){
-
 }
 
-//--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-
 }
 
-//--------------------------------------------------------------
 void ofApp::gotMessage(ofMessage msg){
+}
 
+void ofApp::dragEvent(ofDragInfo dragInfo){
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){
+void ofApp::updateCircles() {
+	ofVec2f m(ofGetMouseX(), ofGetMouseY());
+	for(auto c : circles) {
+		float strength = 0;
+		float damping = 0.9;
+		float dist = m.distance(c.get()->getPosition());
+		float radius = 200;
 
+		if(dist < radius) {
+			strength = (radius-dist)/2;
+		}
+
+		c.get()->addRepulsionForce(m, strength);
+		//		c.get()->setDamping(damping, damping);
+	}
+}
+
+void ofApp::drawCircles() {
+	for(auto c : circles) {
+		ofVec2f pos = c.get()->getPosition();
+		unsigned r = c.get()->getRadius();
+		glPushMatrix();
+		glTranslatef(pos.x, pos.y, 0);
+		ofDrawCircle(0, 0, r);
+		glPopMatrix();
+	}
 }
 
 //--------------------------------------------------------------

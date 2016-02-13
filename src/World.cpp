@@ -3,9 +3,9 @@
 //--------------------------------------------------------------
 void World::setup() {
 	world.init();
-	world.setGravity(0, 30);
+	world.setGravity(0, 0);
 	world.createBounds();
-	world.setFPS(60.0);
+	world.setFPS(24.0);
 	world.enableEvents();
 
 	vector <string> strLines;
@@ -86,6 +86,10 @@ void World::setDrawStyle(_drawStyle s) {
 
 void World::setMode(_mode m) {
 	mode = m;
+}
+
+_mode World::getMode() {
+	return mode;
 }
 
 //--------------------------------------------------------------

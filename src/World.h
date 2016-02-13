@@ -21,6 +21,7 @@ class World : public ofBaseApp {
 
 		void drawLines();
 		void setMode(_mode);
+		_mode getMode();
 		void setDrawStyle(_drawStyle);
 
 		void mouseDragged(int& x, int& y, int& button);
