@@ -27,6 +27,12 @@ class ofApp : public ofBaseApp{
 
 		void updateCircles();
 		void drawCircles();
+		void newCircle();
+
+		float circRadius;
+		float circDrawRadius;
+		float soundInThresLow;
+		float soundInThresHigh;
 
 		void drawDebug();
 
@@ -34,6 +40,7 @@ class ofApp : public ofBaseApp{
 		SoundAnalyzer sound;
 		ofSoundStream ss;
 
+		unsigned numCircles = 10000;
 		vector<shared_ptr <ofxBox2dCircle> > circles;
 		vector<ofVec2f> speakers;
 };
