@@ -3,6 +3,9 @@
 #include "ofMain.h"
 #include "ofxBox2d.h"
 #include "World.h"
+#include "SoundAnalyzer.h"
+
+#define DEBUG
 
 class ofApp : public ofBaseApp{
 	public:
@@ -25,9 +28,12 @@ class ofApp : public ofBaseApp{
 		void updateCircles();
 		void drawCircles();
 
-		void drawFR();
+		void drawDebug();
 
 		World world;
+		SoundAnalyzer sound;
+		ofSoundStream ss;
 
 		vector<shared_ptr <ofxBox2dCircle> > circles;
+		vector<ofVec2f> speakers;
 };
