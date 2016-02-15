@@ -5,6 +5,11 @@ void SoundAnalyzer::setup(unsigned nChannels) {
 	unsigned buffNum = 256;
 	unsigned nBuffers = nChannels*2;
 
+	if(nChannels > soundStream.getNumInputChannels()) {
+		cerr << "Too many channels requested opened" << endl;
+		cerr << "Requested " << nChannels << " max is " << soundStream.getNumInputChannels() << endl;
+	}
+
 	soundStream.setup(this, 0, nChannels, sampleRate, buffNum, nBuffers);
 
 	vols.resize(nChannels);
@@ -15,8 +20,7 @@ void SoundAnalyzer::audioIn(float *inBuff, int bufferSize, int nChannels) {
 		float curVol = 0;
 		unsigned counted = 0;
 
-//		for(unsigned b=0; b<bufferSize; b+=nChannels) {
-		for(unsigned b=0; b<bufferSize; b++) {
+		for(unsigned b=0; b<bufferSize; b+=nChannels) {
 			float someVol = inBuff[b+i]*0.5;
 
 			curVol += someVol * someVol;

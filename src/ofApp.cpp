@@ -9,6 +9,7 @@ void ofApp::setup(){
 	world.setup();
 //	world.world.setIterations(8, 1);
 
+	// Circles
 	circRadius = 1;
 	circDrawRadius = 1.5;
 
@@ -16,20 +17,14 @@ void ofApp::setup(){
 		newCircle();
 	}
 
-	// Sound-stuff
-	unsigned nChannels = 8;
-	soundInThresLow = 0.01;
-	soundInThresHigh = 0.7;
-	sound.setup(nChannels);
-	speakers.resize(8);
-
-	for(ofVec2f &s : speakers) {
-		s.set(ofRandom(ofGetWidth()), ofRandom(ofGetHeight()));
-	}
+	// Force fields
+	unsigned numFields = 8;
+	fields.setup(numFields);
 }
 
 void ofApp::update(){
 	world.update();
+	fields.update();
 
 	if(world.getMode() == PLAY) {
 		updateCircles();
@@ -113,25 +108,8 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 //--------------------------------------------------------------
 void ofApp::updateCircles() {
-	ofVec2f m(ofGetMouseX(), ofGetMouseY());
 	for(auto &c : circles) {
-		int pos = 30;
-		for(unsigned i=0; i<sound.vols.size(); i++) {
-			float v = sound.vols[i];
-			float strength = 0;
-			float dist = speakers[i].distance(c.get()->getPosition());
-//			float dist = m.distance(c.get()->getPosition());
-//			float radius = ofMap(v, soundInThresLow, soundInThresHigh, 0, 500, true);
-			float radius = 250;
-
-			if(dist < radius) {
-//				strength = (radius-dist)/100;
-				strength = ofMap(v, soundInThresLow, soundInThresHigh, 0, 0.05, true);
-			}
-
-			c.get()->addRepulsionForce(speakers[i], strength);
-//			c.get()->addRepulsionForce(m, strength);
-		}
+		fields.affectCircle(c);
 	}
 
 	ofRemove(circles, ofxBox2dBaseShape::shouldRemoveOffScreen);
@@ -169,12 +147,5 @@ void ofApp::newCircle() {
 void ofApp::drawDebug() {
 	ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 50);
 	ofDrawBitmapString(ofToString(circles.size()), 10, 60);
-	for(int i=0; i<sound.vols.size();i++) {
-		ofSetHexColor(0xAAFFFF);
-		float r = ofMap(sound.vols[i], soundInThresLow, soundInThresHigh, 0, 200, true);
-//		ofDrawCircle(speakers[i].x, speakers[i].y, r);
-
-		ofSetHexColor(0xFFFFFFFF);
-		ofDrawBitmapString(ofToString(sound.vols[i]), 10, (10*i)+80);
+	fields.draw();
 	}
-}

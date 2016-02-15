@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "ofxBox2d.h"
 #include "World.h"
-#include "SoundAnalyzer.h"
+#include "ForceFields.h"
 
 #define DEBUG
 
@@ -31,14 +31,11 @@ class ofApp : public ofBaseApp{
 
 		float circRadius;
 		float circDrawRadius;
-		float soundInThresLow;
-		float soundInThresHigh;
 
 		void drawDebug();
 
 		World world;
-		SoundAnalyzer sound;
-		ofSoundStream ss;
+		ForceFields fields;
 
 		unsigned numCircles = 10000;
 		vector<shared_ptr <ofxBox2dCircle> > circles;
