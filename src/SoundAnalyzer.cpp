@@ -5,11 +5,7 @@ void SoundAnalyzer::setup(unsigned nChannels) {
 	unsigned buffNum = 256;
 	unsigned nBuffers = nChannels*2;
 
-	if(nChannels > soundStream.getNumInputChannels()) {
-		cerr << "Too many channels requested opened" << endl;
-		cerr << "Requested " << nChannels << " max is " << soundStream.getNumInputChannels() << endl;
-	}
-
+	
 	soundStream.setup(this, 0, nChannels, sampleRate, buffNum, nBuffers);
 
 	vols.resize(nChannels);
