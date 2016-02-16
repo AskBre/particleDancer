@@ -1,20 +1,22 @@
 #include "ForceFields.h"
 //--------------------------------------------------------------
 
-void ForceFields::setup(unsigned nFF) {
+void ForceFields::setup(unsigned nFF, unsigned r, float sITL, float sITH, float fM) {
 	numForceFields = nFF;
-	soundInThresLow = 0.01;
-	soundInThresHigh = 0.7;
+	soundInThresLow = sITL;
+	soundInThresHigh = sITH;
+	forceMax = fM;
 
 	sound.setup(numForceFields);
 	fields.resize(numForceFields);
 
 	for(Field &f : fields) {
 		f.pos.set(ofRandom(ofGetWidth()), ofRandom(ofGetHeight()));
-		f.radius = 250;
+		f.radius = r;
 	}
 }
 
+//--------------------------------------------------------------
 void ForceFields::update() {
 	for(unsigned i=0; i<numForceFields; i++) {
 		fields[i].strength = sound.vols[i];
@@ -24,7 +26,8 @@ void ForceFields::update() {
 void ForceFields::draw() {
 	for(unsigned i=0; i<numForceFields; i++) {
 		Field *f = &fields[i];
-		float r = ofMap(f->strength, soundInThresLow, soundInThresHigh, 0, 200, true);
+		float r = ofMap(f->strength, soundInThresLow, soundInThresHigh,
+				0, f->radius, true);
 		ofSetHexColor(0xAAFFFF);
 		ofDrawCircle(f->pos, r);
 
@@ -33,17 +36,22 @@ void ForceFields::draw() {
 	}
 }
 
+//--------------------------------------------------------------
 void ForceFields::affectCircle(shared_ptr<ofxBox2dCircle> c) {
 	for(auto &f : fields) {
-		float v = f.strength;
+		float v = ofNormalize(f.strength, soundInThresLow, soundInThresHigh);
 		float strength = 0;
 		float dist = f.distance(c.get()->getPosition());
-//		float radius = ofMap(v, soundInThresLow, soundInThresHigh, 0, 500, true);
+		float iDist = f.radius - dist;
+		float nDist = ofNormalize(iDist, 0, f.radius);
+//		float dist = ofDistSquared(f.pos.x, f.pos.y, cp.x, cp.y);
+		float mv = ofMap(v, 0, soundInThresHigh, 0, forceMax);
 
-		if(dist < f.radius) {
-			strength = ofMap(v, soundInThresLow, soundInThresHigh, 0, 0.05, true);
-		}
+		strength = mv * (nDist/10);
 
-		c.get()->addRepulsionForce(f.pos, strength);
+//		if(dist < f.radius && v > soundInThresLow) {
+//		if(dist < f.radius) {
+			c.get()->addRepulsionForce(f.pos, strength);
+//		}
 	}
 }

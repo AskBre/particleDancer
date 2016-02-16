@@ -6,8 +6,9 @@
 
 class ForceFields : public ofBaseApp {
 	public:
-
-		void setup(unsigned _nFF);
+		void setup(unsigned numForceFields, unsigned r, 
+				float soundThresLo, float soundInThresHi,
+				float forceMax);
 		void update();
 		void draw();
 
@@ -30,4 +31,5 @@ class ForceFields : public ofBaseApp {
 		float soundInThresLow;
 		float soundInThresHigh;
 		unsigned numForceFields;
+		float forceMax;
 };

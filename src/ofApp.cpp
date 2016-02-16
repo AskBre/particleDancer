@@ -2,6 +2,17 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	// Setting of the variables
+	numCircles = 10000;
+	circRadius = 1;
+	circDrawRadius = 1.5;
+
+	unsigned numFields = 8;
+	float soundInThresLow = 0.01;
+	float soundInThresHigh = 0.7;
+	float radius = 500;
+	float forceMax = 1;
+
 	ofSetVerticalSync(true);
 
 	ofBackground(0);
@@ -10,16 +21,12 @@ void ofApp::setup(){
 //	world.world.setIterations(8, 1);
 
 	// Circles
-	circRadius = 1;
-	circDrawRadius = 1.5;
-
 	for(int i=0; i<numCircles; i++) {
 		newCircle();
 	}
 
 	// Force fields
-	unsigned numFields = 8;
-	fields.setup(numFields);
+	fields.setup(numFields, radius, soundInThresLow, soundInThresHigh, forceMax);
 }
 
 void ofApp::update(){
@@ -120,6 +127,7 @@ void ofApp::updateCircles() {
 }
 
 void ofApp::drawCircles() {
+
 	for(auto c : circles) {
 		ofVec2f pos = c.get()->getPosition();
 		glPushMatrix();
@@ -148,4 +156,4 @@ void ofApp::drawDebug() {
 	ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 50);
 	ofDrawBitmapString(ofToString(circles.size()), 10, 60);
 	fields.draw();
-	}
+}

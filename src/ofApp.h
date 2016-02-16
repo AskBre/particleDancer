@@ -37,7 +37,7 @@ class ofApp : public ofBaseApp{
 		World world;
 		ForceFields fields;
 
-		unsigned numCircles = 10000;
+		unsigned numCircles;
 		vector<shared_ptr <ofxBox2dCircle> > circles;
 		vector<ofVec2f> speakers;
 };
