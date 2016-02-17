@@ -3,6 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	// Setting of the variables
+	mode = DRAW_FREE;
 	numCircles = 10000;
 	circRadius = 1;
 	circDrawRadius = 1.5;
@@ -33,7 +34,7 @@ void ofApp::update(){
 	world.update();
 	fields.update();
 
-	if(world.getMode() == PLAY) {
+	if(mode == PLAY) {
 		updateCircles();
 	}
 }
@@ -44,12 +45,16 @@ void ofApp::draw(){
 #endif
 
 	world.draw();
-	world.drawLines();
+	if(mode != PLAY) {
+		world.drawLines();
+		fields.draw();
+		drawMode();
+	}
 
 	ofFill();
 	ofSetHexColor(0xFFFFFF);
 
-	if(world.getMode() == PLAY) {
+	if(mode == PLAY) {
 		drawCircles();
 	}
 }
@@ -65,15 +70,16 @@ void ofApp::keyReleased(int key){
 			world.clear();
 			break;
 		case '1':
-			world.setMode(PLAY);
+			mode = PLAY;
 			break;
 		case '2':
-			world.setMode(DRAW);
-			world.setDrawStyle(FREE);
+			mode = DRAW_FREE;
 			break;
 		case '3':
-			world.setMode(DRAW);
-			world.setDrawStyle(LINE);
+			mode = DRAW_LINE;
+			break;
+		case '4':
+			mode = EDIT_FIELDS;
 			break;
 		case 's':
 			world.saveWorld();
@@ -87,15 +93,26 @@ void ofApp::mouseMoved(int x, int y){
 }
 
 void ofApp::mouseDragged(int x, int y, int button){
-	world.mouseDragged(x, y, button);
+	switch(mode) {
+		case DRAW_FREE:
+			world.mouseDragged(x, y, button);
+			break;
+		case EDIT_FIELDS:
+			fields.mouseDragged(x, y, button);
+			break;
+		default:
+			break;
+	}
 }
 
 void ofApp::mousePressed(int x, int y, int button){
-	world.mousePressed(x, y, button);
+	if(mode == DRAW_LINE) world.mousePressed(x, y, button);
+	if(mode == EDIT_FIELDS) fields.mousePressed(x, y, button);
 }
 
 void ofApp::mouseReleased(int x, int y, int button){
-	world.mouseReleased(x, y, button);
+	if(mode == DRAW_LINE) world.mouseReleased(x, y, button);
+	if(mode == EDIT_FIELDS) fields.mouseReleased(x, y, button);
 }
 
 void ofApp::mouseEntered(int x, int y){
@@ -140,7 +157,6 @@ void ofApp::drawCircles() {
 void ofApp::newCircle() {
 		unsigned xPos = ofRandom(ofGetWidth());
 		unsigned yPos = ofRandom(ofGetHeight());
-//		unsigned yPos = ofRandom(100)+75;
 		shared_ptr <ofxBox2dCircle> c(new ofxBox2dCircle);
 		c.get()->setFixedRotation(true);
 		c.get()->setPhysics(3, 0.53, 0.1);
@@ -148,12 +164,32 @@ void ofApp::newCircle() {
 		c.get()->enableGravity(true);
 		c.get()->setMassFromShape = true;
 		circles.push_back(c);
-
 }
 
 //--------------------------------------------------------------
+void ofApp::drawMode() {
+	ofSetHexColor(0xFF0000);
+	string m;
+	switch(mode) {
+		case DRAW_FREE:
+			m = "Free";
+			break;
+		case DRAW_LINE:
+			m = "Line";
+			break;
+		case EDIT_FIELDS:
+			m = "Edit fields";
+			break;
+		default:
+			break;
+	}
+	ofDrawBitmapString(m, 10, 15);
+	ofSetHexColor(0xFFFFFF);
+}
+
 void ofApp::drawDebug() {
+	ofSetHexColor(0xFF0000);
 	ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 50);
 	ofDrawBitmapString(ofToString(circles.size()), 10, 60);
-	fields.draw();
+	ofSetHexColor(0xFFFFFF);
 }

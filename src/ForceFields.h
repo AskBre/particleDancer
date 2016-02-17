@@ -12,6 +12,10 @@ class ForceFields : public ofBaseApp {
 		void update();
 		void draw();
 
+		void mouseDragged(int &x, int &y, int &button);
+		void mousePressed(int &x, int &y, int &button);
+		void mouseReleased(int &x, int &y, int &button);
+
 		void affectCircle(shared_ptr<ofxBox2dCircle> c);
 
 	private:
@@ -22,6 +26,7 @@ class ForceFields : public ofBaseApp {
 			float distance(ofVec2f p) {
 				return pos.distance(p);
 			}
+			bool isDragged;
 		};
 
 		SoundAnalyzer sound;

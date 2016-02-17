@@ -5,7 +5,7 @@ void World::setup() {
 	world.init();
 	world.setGravity(0, 0);
 //	world.createBounds();
-	world.setFPS(60.0);
+	world.setFPS(24.0);
 //	world.enableEvents();
 
 	vector <string> strLines;
@@ -52,89 +52,49 @@ void World::draw() {
 
 //--------------------------------------------------------------
 void World::drawLines() {
-	if(mode==DRAW) {
-		ofPushStyle();
-		ofFill();
-		ofSetHexColor(0xffffff);
+	ofPushStyle();
+	ofFill();
+	ofSetHexColor(0xffffff);
 
-		for(int i=0; i < lines.size(); i++) {
-			lines[i].draw();
-		}
-
-		ofSetHexColor(0xff0000);
-		ofDrawBitmapString("DRAW", 10, 10);
-
-
-		switch(drawStyle) {
-			case FREE:
-				ofDrawBitmapString("FREEHAND", 10, 25);
-				break;
-			case LINE:
-				ofDrawBitmapString("LINE", 10, 25);
-				break;
-			default:
-				break;
-		}
-
-		ofPopStyle();
+	for(int i=0; i < lines.size(); i++) {
+		lines[i].draw();
 	}
-}
 
-void World::setDrawStyle(_drawStyle s) {
-	drawStyle = s;
-}
 
-void World::setMode(_mode m) {
-	mode = m;
-}
-
-_mode World::getMode() {
-	return mode;
+	ofPopStyle();
 }
 
 //--------------------------------------------------------------
 void World::mousePressed(int& x, int& y, int& button) {
-	if(mode==DRAW) {
-		switch(button) {
-			case 0:
-				lines.push_back(ofPolyline());
-				lines.back().addVertex(x, y);
-				break;
-			default:
-				break;
-		}
+	switch(button) {
+		case 0:
+			lines.push_back(ofPolyline());
+			lines.back().addVertex(x, y);
+			break;
+		default:
+			break;
 	}
 }
 
 void World::mouseReleased(int& x, int& y, int& button) {
-	if(mode==DRAW) {
-		switch(button) {
-			case 0:
-				saveLine(x, y);
-				break;
-			case 2:
-				if(lines.size() && edges.size()){
-					lines.pop_back();
-					edges.pop_back();
-				}
+	switch(button) {
+		case 0:
+			saveLine(x, y);
+			break;
+		case 2:
+			if(lines.size() && edges.size()){
+				lines.pop_back();
+				edges.pop_back();
+			}
 
-				break;
-			default:
-				break;
-		}
+			break;
+		default:
+			break;
 	}
 }
 
 void World::mouseDragged(int& x, int& y, int& button) {
-	if(mode==DRAW) {
-		switch(drawStyle) {
-			case FREE:
-				lines.back().addVertex(x, y);
-				break;
-			default:
-				break;
-		}
-	}
+	lines.back().addVertex(x, y);
 }
 
 //--------------------------------------------------------------

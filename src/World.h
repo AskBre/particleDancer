@@ -3,15 +3,6 @@
 #include "ofMain.h"
 #include "ofxBox2d.h"
 
-enum _mode {
-	DRAW,
-	PLAY,
-};
-
-enum _drawStyle {
-	FREE,
-	LINE,
-};
 
 class World : public ofBaseApp {
 	public:
@@ -20,9 +11,6 @@ class World : public ofBaseApp {
 		void draw();
 
 		void drawLines();
-		void setMode(_mode);
-		_mode getMode();
-		void setDrawStyle(_drawStyle);
 
 		void mouseDragged(int& x, int& y, int& button);
 		void mousePressed(int& x, int& y, int& button);
@@ -35,9 +23,6 @@ class World : public ofBaseApp {
 
 	private:
 		void saveLine(int& x, int& y);
-
-		_mode mode;
-		_drawStyle drawStyle;
 
 		vector<ofPolyline> lines;
 		vector<ofPtr<ofxBox2dEdge> > edges;

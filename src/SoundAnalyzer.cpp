@@ -16,7 +16,8 @@ void SoundAnalyzer::audioIn(float *inBuff, int bufferSize, int nChannels) {
 		float curVol = 0;
 		unsigned counted = 0;
 
-		for(unsigned b=0; b<bufferSize; b+=nChannels) {
+//		for(unsigned b=0; b<bufferSize; b+=nChannels) {
+		for(unsigned b=0; b<bufferSize; b++) {
 			float someVol = inBuff[b+i]*0.5;
 
 			curVol += someVol * someVol;

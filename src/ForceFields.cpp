@@ -11,7 +11,7 @@ void ForceFields::setup(unsigned nFF, unsigned r, float sITL, float sITH, float 
 	fields.resize(numForceFields);
 
 	for(Field &f : fields) {
-		f.pos.set(ofRandom(ofGetWidth()), ofRandom(ofGetHeight()));
+		f.pos.set(50, 50);
 		f.radius = r;
 	}
 }
@@ -26,13 +26,40 @@ void ForceFields::update() {
 void ForceFields::draw() {
 	for(unsigned i=0; i<numForceFields; i++) {
 		Field *f = &fields[i];
-		float r = ofMap(f->strength, soundInThresLow, soundInThresHigh,
-				0, f->radius, true);
-		ofSetHexColor(0xAAFFFF);
-		ofDrawCircle(f->pos, r);
+		ofSetHexColor(0xFF0000);
+		ofNoFill();
+		ofDrawCircle(f->pos, f->radius * f->strength);
+		ofSetHexColor(0xFFFFFF);
+		ofFill();
+		ofDrawBitmapString(ofToString(i), f->pos.x-4, f->pos.y+4);
 
-		ofSetHexColor(0xFFFFFFFF);
 		ofDrawBitmapString(ofToString(f->strength), 10, (10*i)+80);
+	}
+}
+
+//--------------------------------------------------------------
+void ForceFields::mouseDragged(int& x, int& y, int& button) {
+	ofVec2f m(x, y);
+	for(auto &f: fields) {
+		if(f.isDragged) {
+			f.pos = m;
+			break;
+		}
+	}
+}
+
+void ForceFields::mousePressed(int &x, int &y, int &button){
+	ofVec2f m(x, y);
+	for(auto &f: fields) {
+		if(f.distance(m) < 20) {
+			f.isDragged = true;
+		}
+	}
+}
+
+void ForceFields::mouseReleased(int &x, int &y, int &button){
+	for(auto &f: fields) {
+		f.isDragged = false;
 	}
 }
 
@@ -49,9 +76,11 @@ void ForceFields::affectCircle(shared_ptr<ofxBox2dCircle> c) {
 
 		strength = mv * (nDist/10);
 
-//		if(dist < f.radius && v > soundInThresLow) {
+		if(dist < f.radius && v > soundInThresLow) {
 //		if(dist < f.radius) {
 			c.get()->addRepulsionForce(f.pos, strength);
-//		}
+		}
 	}
 }
+
+

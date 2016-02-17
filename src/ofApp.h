@@ -7,6 +7,13 @@
 
 #define DEBUG
 
+enum run_mode_t {
+	PLAY,
+	DRAW_FREE,
+	DRAW_LINE,
+	EDIT_FIELDS,
+};
+
 class ofApp : public ofBaseApp{
 	public:
 		void setup();
@@ -32,10 +39,12 @@ class ofApp : public ofBaseApp{
 		float circRadius;
 		float circDrawRadius;
 
+		void drawMode();
 		void drawDebug();
 
 		World world;
 		ForceFields fields;
+		run_mode_t mode;
 
 		unsigned numCircles;
 		vector<shared_ptr <ofxBox2dCircle> > circles;
