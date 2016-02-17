@@ -11,6 +11,10 @@ void ForceFields::setup(unsigned nFF, unsigned r, float sITL, float sITH, float 
 	fields.resize(numForceFields);
 
 	loadPositions();
+	
+	for(auto &f : fields) {
+		f.radius = r;
+	}
 }
 
 //--------------------------------------------------------------
@@ -61,7 +65,7 @@ void ForceFields::mouseReleased(int &x, int &y, int &button){
 }
 
 //--------------------------------------------------------------
-void ForceFields::affectCircle(shared_ptr<ofxBox2dCircle> c) {
+void ForceFields::affectCircle(const shared_ptr<ofxBox2dCircle> &c) {
 	for(auto &f : fields) {
 		float v = ofNormalize(f.strength, soundInThresLow, soundInThresHigh);
 		if(v > soundInThresLow) {
@@ -80,6 +84,7 @@ void ForceFields::affectCircle(shared_ptr<ofxBox2dCircle> c) {
 	}
 }
 
+//--------------------------------------------------------------
 void ForceFields::savePositions() {
 	ofxXmlSettings s;
 	s.addTag("fieldPositions");

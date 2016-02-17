@@ -156,15 +156,16 @@ void ofApp::drawCircles() {
 }
 
 void ofApp::newCircle() {
-		unsigned xPos = ofRandom(ofGetWidth());
-		unsigned yPos = ofRandom(ofGetHeight());
-		shared_ptr <ofxBox2dCircle> c(new ofxBox2dCircle);
-		c.get()->setFixedRotation(true);
-		c.get()->setPhysics(3, 0.53, 0.1);
-		c.get()->setup(world.world.getWorld(), xPos, yPos, circRadius);
-		c.get()->enableGravity(true);
-		c.get()->setMassFromShape = true;
-		circles.push_back(c);
+	unsigned xPos = ofRandom(ofGetWidth());
+	unsigned yPos = ofRandom(ofGetHeight());
+	//		shared_ptr <ofxBox2dCircle> c(new ofxBox2dCircle);
+	shared_ptr <ofxBox2dCircle> c = make_shared<ofxBox2dCircle>();
+	circles.push_back(c);
+	circles.back().get()->setFixedRotation(true);
+	circles.back().get()->setPhysics(3, 0.53, 0.1);
+	circles.back().get()->setup(world.world.getWorld(), xPos, yPos, circRadius);
+	circles.back().get()->enableGravity(true);
+	circles.back().get()->setMassFromShape = true;
 }
 
 //--------------------------------------------------------------
