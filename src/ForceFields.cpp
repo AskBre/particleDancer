@@ -10,10 +10,7 @@ void ForceFields::setup(unsigned nFF, unsigned r, float sITL, float sITH, float 
 	sound.setup(numForceFields);
 	fields.resize(numForceFields);
 
-	for(Field &f : fields) {
-		f.pos.set(50, 50);
-		f.radius = r;
-	}
+	loadPositions();
 }
 
 //--------------------------------------------------------------
@@ -67,20 +64,60 @@ void ForceFields::mouseReleased(int &x, int &y, int &button){
 void ForceFields::affectCircle(shared_ptr<ofxBox2dCircle> c) {
 	for(auto &f : fields) {
 		float v = ofNormalize(f.strength, soundInThresLow, soundInThresHigh);
-		float strength = 0;
-		float dist = f.distance(c.get()->getPosition());
-		float iDist = f.radius - dist;
-		float nDist = ofNormalize(iDist, 0, f.radius);
-//		float dist = ofDistSquared(f.pos.x, f.pos.y, cp.x, cp.y);
-		float mv = ofMap(v, 0, soundInThresHigh, 0, forceMax);
+		if(v > soundInThresLow) {
+			float dist = f.distance(c.get()->getPosition());
+			if(dist < f.radius) {
+				float strength = 0;
+				float iDist = f.radius - dist;
+				float nDist = ofNormalize(iDist, 0, f.radius);
+				float mv = ofMap(v, 0, soundInThresHigh, 0, forceMax);
 
-		strength = mv * (nDist/10);
+				strength = mv * (nDist/10);
 
-		if(dist < f.radius && v > soundInThresLow) {
-//		if(dist < f.radius) {
-			c.get()->addRepulsionForce(f.pos, strength);
+				c.get()->addRepulsionForce(f.pos, strength);
+			}
 		}
 	}
 }
 
+void ForceFields::savePositions() {
+	ofxXmlSettings s;
+	s.addTag("fieldPositions");
+	s.pushTag("fieldPositions");
+	for(int i=0; i<numForceFields; i++) {
+		s.addTag("position");
+		s.pushTag("position", i);
+		s.addValue("x", fields[i].pos.x);
+		s.addValue("y", fields[i].pos.y);
+		s.popTag();
+	}
+	s.popTag();
+	s.saveFile("fieldPositions.xml");
 
+	cout << "Field positions saved" << endl;
+}
+
+void ForceFields::loadPositions() {
+	ofxXmlSettings s;
+	if(s.loadFile("fieldPositions.xml")) {
+		s.pushTag("fieldPositions");
+		for(unsigned i=0; i<numForceFields; i++) {
+				ofVec2f p;
+			if(s.tagExists("position", i)) {
+				s.pushTag("position", i);
+				p.x = s.getValue("x", 0);
+				p.y = s.getValue("y", 0);
+				s.popTag();
+			} else {
+				cout << "Not enough field positions loaded, ";
+				cout << "setting to 100,100." << endl;
+				p.set(100,100);
+			}
+				fields[i].pos = p;
+
+		}
+		s.popTag();
+	} else {
+		cerr << "No field position file found" << endl;
+	}
+}

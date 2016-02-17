@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "SoundAnalyzer.h"
 #include "ofxBox2d.h"
+#include "ofxXmlSettings.h"
 
 class ForceFields : public ofBaseApp {
 	public:
@@ -17,6 +18,8 @@ class ForceFields : public ofBaseApp {
 		void mouseReleased(int &x, int &y, int &button);
 
 		void affectCircle(shared_ptr<ofxBox2dCircle> c);
+		void savePositions();
+		void loadPositions();
 
 	private:
 		struct Field {

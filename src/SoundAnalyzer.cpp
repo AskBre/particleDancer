@@ -1,10 +1,9 @@
 #include "SoundAnalyzer.h"
 
 void SoundAnalyzer::setup(unsigned nChannels) {
-	unsigned sampleRate = 48000;
+	unsigned sampleRate = 44100;
 	unsigned buffNum = 256;
-	unsigned nBuffers = nChannels*2;
-
+	unsigned nBuffers = nChannels;
 	
 	soundStream.setup(this, 0, nChannels, sampleRate, buffNum, nBuffers);
 

@@ -11,7 +11,7 @@ void ofApp::setup(){
 	unsigned numFields = 8;
 	float soundInThresLow = 0.01;
 	float soundInThresHigh = 0.7;
-	float radius = 500;
+	float radius = 250;
 	float forceMax = 1;
 
 	ofSetVerticalSync(true);
@@ -82,6 +82,7 @@ void ofApp::keyReleased(int key){
 			mode = EDIT_FIELDS;
 			break;
 		case 's':
+			fields.savePositions();
 			world.saveWorld();
 			break;
 		default:
