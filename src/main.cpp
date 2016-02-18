@@ -6,7 +6,7 @@
 //========================================================================
 int main( ){
 
-	ofGLFWWindowSettings settings;
+	ofGLWindowSettings settings;
 
 	settings.width = 1024;
 	settings.height = 768;
@@ -14,7 +14,7 @@ int main( ){
 
 	settings.width = 150;
 	settings.height = 100;
-	settings.resizable = false;
+//	settings.resizable = false;
 	shared_ptr<ofAppBaseWindow> guiWindow = ofCreateWindow(settings);
 
 	shared_ptr<ofApp> mainApp(new ofApp);

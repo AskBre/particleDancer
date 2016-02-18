@@ -68,6 +68,11 @@ void ForceFields::mouseReleased(int &x, int &y, int &button){
 vector<float> ForceFields::getVols() {
 	return sound.vols;
 }
+
+vector<float> *ForceFields::getVolsPtr() {
+	return &sound.vols;
+}
+
 void ForceFields::affectCircle(const shared_ptr<ofxBox2dCircle> &c) {
 	for(auto &f : fields) {
 		float v = ofNormalize(f.strength, soundInThresLow, soundInThresHigh);

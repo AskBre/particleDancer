@@ -22,7 +22,7 @@ void ofApp::setup(){
 
 	// Circles
 	for(int i=0; i<numCircles; i++) {
-		newCircle();
+//		newCircle();
 	}
 
 	// Force fields
@@ -37,8 +37,8 @@ void ofApp::update(){
 		updateCircles();
 	}
 
-	vector<float> _vols = fields.getVols();
-	gui->vols = _vols;
+//	vector<float> _vols = fields.getVols();
+	gui->setVolsPtr(fields.getVolsPtr());
 }
 
 void ofApp::draw(){

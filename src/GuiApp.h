@@ -9,5 +9,9 @@ class GuiApp : public ofBaseApp {
 		void update();
 		void draw();
 
+		void setVolsPtr(vector<float> *_volsPtr);
+
+	private:
 		vector<float> vols;
+		vector<float> *volsPtr;
 };

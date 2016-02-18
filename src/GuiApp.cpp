@@ -9,14 +9,17 @@ void GuiApp::update() {
 }
 
 void GuiApp::draw() {
-	// Needs optimization
-	for(unsigned i=0; i<vols.size(); i++) {
+	for(unsigned i=0; i<volsPtr->size(); i++) {
 		ofSetHexColor(0xFFFFFF);
 		int gap = 5;
-		int w = (ofGetWidth()/vols.size()) - gap;
+		int w = (ofGetWidth()/volsPtr->size()) - gap;
 		int mh = ofGetHeight();
-		int h = vols.at(i) * mh;
-		ofVec2f p(i * (w+gap), mh);
+		int h = volsPtr->at(i) * mh;
+		ofVec2f p((i *w+gap), mh);
 		ofDrawRectangle(p, w, -h);
 	}
+}
+
+void GuiApp::setVolsPtr(vector<float> *_volsPtr) {
+	volsPtr = _volsPtr;
 }
