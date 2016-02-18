@@ -65,10 +65,6 @@ void ForceFields::mouseReleased(int &x, int &y, int &button){
 }
 
 //--------------------------------------------------------------
-vector<float> ForceFields::getVols() {
-	return sound.vols;
-}
-
 vector<float> *ForceFields::getVolsPtr() {
 	return &sound.vols;
 }

@@ -17,7 +17,6 @@ class ForceFields : public ofBaseApp {
 		void mousePressed(int &x, int &y, int &button);
 		void mouseReleased(int &x, int &y, int &button);
 
-		vector<float> getVols();
 		vector<float> *getVolsPtr();
 		void affectCircle(const shared_ptr<ofxBox2dCircle> &c);
 

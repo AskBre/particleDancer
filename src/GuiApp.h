@@ -12,6 +12,8 @@ class GuiApp : public ofBaseApp {
 		void setVolsPtr(vector<float> *_volsPtr);
 
 	private:
-		vector<float> vols;
 		vector<float> *volsPtr;
+
+		ofxPanel panel;
+		ofxToggle isDraw;
 };

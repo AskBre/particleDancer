@@ -15,6 +15,7 @@ void ofApp::setup(){
 	float forceMax = 1;
 
 	ofSetVerticalSync(true);
+	ofDisableAntiAliasing();
 	ofBackground(0);
 
 	world.setup();
@@ -22,7 +23,7 @@ void ofApp::setup(){
 
 	// Circles
 	for(int i=0; i<numCircles; i++) {
-//		newCircle();
+		newCircle();
 	}
 
 	// Force fields
@@ -37,7 +38,6 @@ void ofApp::update(){
 		updateCircles();
 	}
 
-//	vector<float> _vols = fields.getVols();
 	gui->setVolsPtr(fields.getVolsPtr());
 }
 
@@ -160,7 +160,6 @@ void ofApp::drawCircles() {
 void ofApp::newCircle() {
 	unsigned xPos = ofRandom(ofGetWidth());
 	unsigned yPos = ofRandom(ofGetHeight());
-	//		shared_ptr <ofxBox2dCircle> c(new ofxBox2dCircle);
 	shared_ptr <ofxBox2dCircle> c = make_shared<ofxBox2dCircle>();
 	circles.push_back(c);
 	circles.back().get()->setFixedRotation(true);
