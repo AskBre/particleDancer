@@ -42,4 +42,5 @@ class ForceFields : public ofBaseApp {
 		float soundInThresHigh;
 		unsigned numForceFields;
 		float forceMax;
+		float radiusMax;
 };

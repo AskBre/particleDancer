@@ -11,16 +11,17 @@ void ForceFields::setup(unsigned nFF, unsigned r, float sITL, float sITH, float 
 	fields.resize(numForceFields);
 
 	loadPositions();
-	
-	for(auto &f : fields) {
-		f.radius = r;
-	}
+
+	radiusMax = r;
 }
 
 //--------------------------------------------------------------
 void ForceFields::update() {
 	for(unsigned i=0; i<numForceFields; i++) {
-		fields[i].strength = sound.vols[i];
+		float v = ofNormalize(sound.vols[i], soundInThresLow, soundInThresHigh);
+		float mv = ofMap(v, 0, soundInThresHigh, 0, forceMax);
+		fields[i].strength = mv;
+		fields[i].radius = v * radiusMax * 4;
 	}
 }
 
@@ -29,7 +30,7 @@ void ForceFields::draw() {
 		Field *f = &fields[i];
 		ofSetHexColor(0xFF0000);
 		ofNoFill();
-		ofDrawCircle(f->pos, f->radius * f->strength);
+		ofDrawCircle(f->pos, f->radius);
 		ofSetHexColor(0xFFFFFF);
 		ofFill();
 		ofDrawBitmapString(ofToString(i), f->pos.x-4, f->pos.y+4);
@@ -71,18 +72,15 @@ vector<float> *ForceFields::getVolsPtr() {
 
 void ForceFields::affectCircle(const shared_ptr<ofxBox2dCircle> &c) {
 	for(auto &f : fields) {
-		float v = ofNormalize(f.strength, soundInThresLow, soundInThresHigh);
-		if(v > soundInThresLow) {
+		if(f.strength) {
 			float dist = f.distance(c.get()->getPosition());
 			if(dist < f.radius) {
-				float strength = 0;
 				float iDist = f.radius - dist;
 				float nDist = ofNormalize(iDist, 0, f.radius);
-				float mv = ofMap(v, 0, soundInThresHigh, 0, forceMax);
 
-				strength = mv * (nDist/10);
+				float st = (f.strength * nDist)/10;
 
-				c.get()->addRepulsionForce(f.pos, strength);
+				c.get()->addRepulsionForce(f.pos, st);
 			}
 		}
 	}
