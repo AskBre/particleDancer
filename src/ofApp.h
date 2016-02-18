@@ -4,6 +4,7 @@
 #include "ofxBox2d.h"
 #include "World.h"
 #include "ForceFields.h"
+#include "GuiApp.h"
 
 #define DEBUG
 
@@ -35,6 +36,8 @@ class ofApp : public ofBaseApp{
 		void updateCircles();
 		void drawCircles();
 		void newCircle();
+
+		shared_ptr<GuiApp> gui;
 
 		float circRadius;
 		float circDrawRadius;

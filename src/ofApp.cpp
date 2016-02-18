@@ -15,7 +15,6 @@ void ofApp::setup(){
 	float forceMax = 1;
 
 	ofSetVerticalSync(true);
-
 	ofBackground(0);
 
 	world.setup();
@@ -37,6 +36,9 @@ void ofApp::update(){
 	if(mode == PLAY) {
 		updateCircles();
 	}
+
+	vector<float> _vols = fields.getVols();
+	gui->vols = _vols;
 }
 
 void ofApp::draw(){
