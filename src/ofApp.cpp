@@ -8,37 +8,41 @@ void ofApp::setup(){
 	circRadius = 1;
 	circDrawRadius = 1.5;
 
-	unsigned numFields = 8;
+	numFields = 8;
 	float soundInThresLow = 0.01;
 	float soundInThresHigh = 0.7;
-	float radius = 250;
-	float forceMax = 1;
+	radius = 250;
+	float forceMax = -1;
 
 	ofSetVerticalSync(true);
-	ofDisableAntiAliasing();
+//	ofDisableAntiAliasing();
 	ofBackground(0);
 
 	world.setup();
 //	world.world.setIterations(8, 1);
 
-	// Circles
-	for(int i=0; i<numCircles; i++) {
-		newCircle();
-	}
-
 	// Force fields
 	fields.setup(numFields, radius, soundInThresLow, soundInThresHigh, forceMax);
+	fieldPosPtrs = fields.getPosPtrs();
+
+	gui->setVolsPtr(fields.getVolsPtr());
+
+	// Circles
+	for(int i=0; i<numCircles; i++) {
+//		newCircle();
+	}
+
 }
 
 void ofApp::update(){
 	world.update();
 	fields.update();
+	gui->circleCount = circles.size();
 
 	if(mode == PLAY) {
 		updateCircles();
 	}
 
-	gui->setVolsPtr(fields.getVolsPtr());
 }
 
 void ofApp::draw(){
@@ -147,7 +151,6 @@ void ofApp::updateCircles() {
 }
 
 void ofApp::drawCircles() {
-
 	for(auto c : circles) {
 		ofVec2f pos = c.get()->getPosition();
 		glPushMatrix();
@@ -158,13 +161,17 @@ void ofApp::drawCircles() {
 }
 
 void ofApp::newCircle() {
-	unsigned xPos = ofRandom(ofGetWidth());
-	unsigned yPos = ofRandom(ofGetHeight());
+	ofVec2f relPos(ofRandom(radius), ofRandom(radius));
+	unsigned f = ofRandom(fieldPosPtrs.size());
+
+	ofVec2f *fPosPtr = fieldPosPtrs.at(f);
+
+	ofVec2f pos = (*fPosPtr + relPos) - (radius/2);
 	shared_ptr <ofxBox2dCircle> c = make_shared<ofxBox2dCircle>();
 	circles.push_back(c);
 	circles.back().get()->setFixedRotation(true);
 	circles.back().get()->setPhysics(3, 0.53, 0.1);
-	circles.back().get()->setup(world.world.getWorld(), xPos, yPos, circRadius);
+	circles.back().get()->setup(world.world.getWorld(), pos.x, pos.y, circRadius);
 	circles.back().get()->enableGravity(true);
 	circles.back().get()->setMassFromShape = true;
 }

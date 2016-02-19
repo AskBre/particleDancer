@@ -11,6 +11,8 @@ class GuiApp : public ofBaseApp {
 
 		void setVolsPtr(vector<float> *_volsPtr);
 
+		unsigned circleCount;
+
 	private:
 		vector<float> *volsPtr;
 

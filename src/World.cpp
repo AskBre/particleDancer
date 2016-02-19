@@ -5,7 +5,7 @@ void World::setup() {
 	world.init();
 	world.setGravity(0, 0);
 //	world.createBounds();
-	world.setFPS(24.0);
+	world.setFPS(60.0);
 //	world.enableEvents();
 
 	vector <string> strLines;

@@ -66,6 +66,16 @@ void ForceFields::mouseReleased(int &x, int &y, int &button){
 }
 
 //--------------------------------------------------------------
+vector<ofVec2f *> ForceFields::getPosPtrs() {
+	vector<ofVec2f *> fieldPosPtrs;
+
+	for(auto &f : fields) {
+		fieldPosPtrs.push_back(&f.pos);
+	}
+
+	return fieldPosPtrs;
+}
+
 vector<float> *ForceFields::getVolsPtr() {
 	return &sound.vols;
 }

@@ -50,6 +50,9 @@ class ofApp : public ofBaseApp{
 		run_mode_t mode;
 
 		unsigned numCircles;
+		float radius;
+		unsigned numFields;
+
 		vector<shared_ptr <ofxBox2dCircle> > circles;
-		vector<ofVec2f> speakers;
+		vector<ofVec2f *> fieldPosPtrs;
 };

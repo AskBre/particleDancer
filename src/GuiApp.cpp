@@ -14,6 +14,11 @@ void GuiApp::update() {
 void GuiApp::draw() {
 	panel.draw();
 	if(isDraw) {
+		ofSetHexColor(0xFF0000);
+		ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 50);
+		ofDrawBitmapString(ofToString(circleCount), 10, 60);
+		ofSetHexColor(0xFFFFFF);
+
 		for(unsigned i=0; i<volsPtr->size(); i++) {
 			ofSetHexColor(0xFFFFFF);
 			int gap = 5;
