@@ -5,7 +5,7 @@ void GuiApp::setup() {
 	ofSetVerticalSync(false);
 
 	panel.setup();
-	panel.add(isDraw.setup("Draw", true));
+	panel.add(isDraw.set("Draw", true));
 }
 
 void GuiApp::update() {

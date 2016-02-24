@@ -17,5 +17,5 @@ class GuiApp : public ofBaseApp {
 		vector<float> *volsPtr;
 
 		ofxPanel panel;
-		ofxToggle isDraw;
+		ofParameter<bool> isDraw;
 };
