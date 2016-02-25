@@ -20,8 +20,16 @@ void GuiApp::setup() {
 	panel.add(isFieldEditable.set("Edit fields", true));
 
 	panel.add(space);
+	panel.add(force.set("Global Force", 1, -2, 2));
+	panel.add(maxCircles.set("Max circles", 1, 1, 10000));
+	panel.add(isRedCircle.set("Red circle", false));
+
+	panel.add(space);
 	panel.add(save.setup("Save"));
 	panel.add(clear.setup("Clear"));
+
+	panel.setSize(500,500);
+	panel.setWidthElements(500);
 }
 
 void GuiApp::update() {

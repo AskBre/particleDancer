@@ -47,7 +47,6 @@ class ofApp : public ofBaseApp{
 		ForceFields fields;
 		run_mode_t mode;
 
-		unsigned numCircles;
 		float radius;
 		unsigned numFields;
 

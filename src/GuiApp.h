@@ -12,11 +12,18 @@ class GuiApp : public ofBaseApp {
 		void setVolsPtr(vector<float> *_volsPtr);
 
 		ofParameter<string> space;
+
 		ofParameter<float> frameRate;
 		ofParameter<unsigned> circleCount;
+
 		ofParameter<bool> isPlay;
 		ofParameter<bool> isDrawable;
 		ofParameter<bool> isFieldEditable;
+
+		ofParameter<float> force;
+		ofParameter<unsigned> maxCircles;
+		ofParameter<bool> isRedCircle;
+
 		ofxButton save;
 		ofxButton clear;
 

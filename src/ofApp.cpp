@@ -4,7 +4,7 @@
 void ofApp::setup(){
 	// Setting of the variables
 	mode = DRAW_FREE;
-	numCircles = 10000;
+	gui->maxCircles = 10000;
 	circRadius = 1;
 	circDrawRadius = 1.5;
 
@@ -12,7 +12,7 @@ void ofApp::setup(){
 	float soundInThresLow = 0.01;
 	float soundInThresHigh = 0.7;
 	radius = 250;
-	float forceMax = -1;
+	float forceMax = 1;
 
 	ofSetVerticalSync(true);
 //	ofDisableAntiAliasing();
@@ -31,7 +31,7 @@ void ofApp::setup(){
 	gui->clear.addListener(this, &ofApp::clear);
 
 	// Circles
-	for(int i=0; i<numCircles; i++) {
+	for(int i=0; i<gui->maxCircles; i++) {
 //		newCircle();
 	}
 
@@ -111,8 +111,10 @@ void ofApp::updateCircles() {
 
 	ofRemove(circles, ofxBox2dBaseShape::shouldRemoveOffScreen);
 
-	if(circles.size() < numCircles) {
+	if(circles.size() < gui->maxCircles) {
 		newCircle();
+	} else if(circles.size() > gui->maxCircles) {
+		circles.pop_back();
 	}
 }
 
@@ -122,6 +124,16 @@ void ofApp::drawCircles() {
 		glPushMatrix();
 		glTranslatef(pos.x, pos.y, 0);
 		ofDrawCircle(0, 0, circDrawRadius);
+		glPopMatrix();
+	}
+
+	if(gui->isRedCircle) {
+		glPushMatrix();
+			ofSetHexColor(0xFF0000);
+			ofVec2f pos = circles[0].get()->getPosition();
+			glTranslatef(pos.x, pos.y, 0);
+			ofDrawCircle(0, 0, circDrawRadius);
+			ofSetHexColor(0xFFFFFF);
 		glPopMatrix();
 	}
 }
