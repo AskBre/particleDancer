@@ -27,6 +27,9 @@ void ofApp::setup(){
 
 	gui->setVolsPtr(fields.getVolsPtr());
 
+	gui->save.addListener(this, &ofApp::save);
+	gui->clear.addListener(this, &ofApp::clear);
+
 	// Circles
 	for(int i=0; i<numCircles; i++) {
 //		newCircle();
@@ -39,28 +42,22 @@ void ofApp::update(){
 	fields.update();
 	gui->circleCount = circles.size();
 
-	if(mode == PLAY) {
+	if(gui->isPlay) {
 		updateCircles();
 	}
 
 }
 
 void ofApp::draw(){
-#ifdef DEBUG
-	drawDebug();
-#endif
-
 	world.draw();
-	if(mode != PLAY) {
-		world.drawLines();
-		fields.draw();
-		drawMode();
-	}
+
+	if(gui->isDrawable) world.drawLines();
+
+	if(gui->isFieldEditable) fields.draw();
 
 	ofFill();
 	ofSetHexColor(0xFFFFFF);
-
-	if(mode == PLAY) {
+	if(gui->isPlay) {
 		drawCircles();
 	}
 }
@@ -71,55 +68,24 @@ void ofApp::keyPressed(int key){
 }
 
 void ofApp::keyReleased(int key){
-	switch(key) {
-		case 'c':
-			world.clear();
-			break;
-		case '1':
-			mode = PLAY;
-			break;
-		case '2':
-			mode = DRAW_FREE;
-			break;
-		case '3':
-			mode = DRAW_LINE;
-			break;
-		case '4':
-			mode = EDIT_FIELDS;
-			break;
-		case 's':
-			fields.savePositions();
-			world.saveWorld();
-			break;
-		default:
-			break;
-	}
 }
 
 void ofApp::mouseMoved(int x, int y){
 }
 
 void ofApp::mouseDragged(int x, int y, int button){
-	switch(mode) {
-		case DRAW_FREE:
-			world.mouseDragged(x, y, button);
-			break;
-		case EDIT_FIELDS:
-			fields.mouseDragged(x, y, button);
-			break;
-		default:
-			break;
-	}
+	if(gui->isDrawable) world.mouseDragged(x, y, button);
+	if(gui->isFieldEditable) fields.mouseDragged(x, y, button);
 }
 
 void ofApp::mousePressed(int x, int y, int button){
-	if(mode == DRAW_LINE) world.mousePressed(x, y, button);
-	if(mode == EDIT_FIELDS) fields.mousePressed(x, y, button);
+	if(gui->isDrawable) world.mousePressed(x, y, button);
+	if(gui->isFieldEditable) fields.mousePressed(x, y, button);
 }
 
 void ofApp::mouseReleased(int x, int y, int button){
-	if(mode == DRAW_LINE) world.mouseReleased(x, y, button);
-	if(mode == EDIT_FIELDS) fields.mouseReleased(x, y, button);
+	if(gui->isDrawable) world.mouseReleased(x, y, button);
+	if(gui->isFieldEditable) fields.mouseReleased(x, y, button);
 }
 
 void ofApp::mouseEntered(int x, int y){
@@ -177,29 +143,11 @@ void ofApp::newCircle() {
 }
 
 //--------------------------------------------------------------
-void ofApp::drawMode() {
-	ofSetHexColor(0xFF0000);
-	string m;
-	switch(mode) {
-		case DRAW_FREE:
-			m = "Free";
-			break;
-		case DRAW_LINE:
-			m = "Line";
-			break;
-		case EDIT_FIELDS:
-			m = "Edit fields";
-			break;
-		default:
-			break;
-	}
-	ofDrawBitmapString(m, 10, 15);
-	ofSetHexColor(0xFFFFFF);
+void ofApp::save() {
+	fields.savePositions();
+	world.saveWorld();
 }
 
-void ofApp::drawDebug() {
-	ofSetHexColor(0xFF0000);
-	ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 50);
-	ofDrawBitmapString(ofToString(circles.size()), 10, 60);
-	ofSetHexColor(0xFFFFFF);
+void ofApp::clear() {
+	world.clear();
 }

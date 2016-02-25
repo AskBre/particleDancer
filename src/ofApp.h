@@ -6,8 +6,6 @@
 #include "ForceFields.h"
 #include "GuiApp.h"
 
-#define DEBUG
-
 enum run_mode_t {
 	PLAY,
 	DRAW_FREE,
@@ -37,13 +35,13 @@ class ofApp : public ofBaseApp{
 		void drawCircles();
 		void newCircle();
 
+		void save();
+		void clear();
+
 		shared_ptr<GuiApp> gui;
 
 		float circRadius;
 		float circDrawRadius;
-
-		void drawMode();
-		void drawDebug();
 
 		World world;
 		ForceFields fields;

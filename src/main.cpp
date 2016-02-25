@@ -14,9 +14,6 @@ int main( ){
 	settings.height = 1050;
 	shared_ptr<ofAppBaseWindow> mainWindow = ofCreateWindow(settings);
 
-	settings.width = 150;
-	settings.height = 100;
-	settings.resizable = false;
 	shared_ptr<ofAppBaseWindow> guiWindow = ofCreateWindow(settings);
 
 	shared_ptr<ofApp> mainApp(new ofApp);

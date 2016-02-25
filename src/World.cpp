@@ -53,14 +53,12 @@ void World::draw() {
 //--------------------------------------------------------------
 void World::drawLines() {
 	ofPushStyle();
-	ofFill();
-	ofSetHexColor(0xffffff);
+		ofFill();
+		ofSetHexColor(0xffffff);
 
-	for(int i=0; i < lines.size(); i++) {
-		lines[i].draw();
-	}
-
-
+		for(int i=0; i < lines.size(); i++) {
+			lines[i].draw();
+		}
 	ofPopStyle();
 }
 
@@ -69,6 +67,7 @@ void World::mousePressed(int& x, int& y, int& button) {
 	switch(button) {
 		case 0:
 			lines.push_back(ofPolyline());
+			lines.back().addVertex(x, y);
 			lines.back().addVertex(x, y);
 			break;
 		default:
@@ -86,7 +85,6 @@ void World::mouseReleased(int& x, int& y, int& button) {
 				lines.pop_back();
 				edges.pop_back();
 			}
-
 			break;
 		default:
 			break;
@@ -94,7 +92,7 @@ void World::mouseReleased(int& x, int& y, int& button) {
 }
 
 void World::mouseDragged(int& x, int& y, int& button) {
-	lines.back().addVertex(x, y);
+	lines.back()[0] = ofPoint(x, y);
 }
 
 //--------------------------------------------------------------
@@ -104,7 +102,6 @@ void World::clear() {
 }
 
 void World::saveLine(int& x, int& y) {
-	lines.back().addVertex(x, y);
 	ofPtr <ofxBox2dEdge> edge = ofPtr<ofxBox2dEdge>(new ofxBox2dEdge);
 	lines.back().simplify();
 
